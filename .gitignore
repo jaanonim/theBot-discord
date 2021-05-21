@@ -1,0 +1,5 @@
+env
+.vscode
+.env
+playlist.json
+__pycache__
