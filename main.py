@@ -19,20 +19,32 @@ async def on_member_join(member):
     await member.add_roles(discord.utils.get(member.guild.roles, name="DJ"))
 
 
-@bot.command(pass_context=True)
-async def ha(ctx):
+@bot.command(pass_context=True, aliases=["c", "ha"], description="Give random color")
+async def color(ctx):
     guild = ctx.guild
     user = ctx.author
     role = discord.utils.get(guild.roles, name=user.name)
     if not role:
         role = await guild.create_role(name=user.name)
-    await role.edit(color=discord.Colour.random())
+    c = discord.Colour.random()
+    await role.edit(color=c)
     await user.add_roles(role)
+    embed = discord.Embed(
+        title="Colors",
+        description=f"{ctx.author.mention} have new color! ✨",
+        color=c,
+    )
+    await ctx.send(embed=embed)
 
 
-@bot.command(pass_context=True)
+@bot.command(pass_context=True, aliases=["author"], description="Aboute bot")
 async def aboute(ctx):
-    await ctx.send("Author: jaanonim")
+    embed = discord.Embed(
+        title="Aboute",
+        description="Author: jaanonim",
+        color=discord.Color.green(),
+    )
+    await ctx.send(embed=embed)
 
 
 bot.add_cog(Music(bot))

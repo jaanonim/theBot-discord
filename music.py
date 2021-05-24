@@ -288,7 +288,7 @@ class Music(commands.Cog):
                 embed = discord.Embed(
                     title="",
                     description="No channel to join. Please call `,join` from a voice channel.",
-                    color=discord.Color.green(),
+                    color=discord.Color.red(),
                 )
                 await ctx.send(embed=embed)
                 raise InvalidVoiceChannel(
@@ -367,7 +367,7 @@ class Music(commands.Cog):
         await player.queue.put(source)
 
     @commands.command(
-        name="shuffle", aliases=["random", "r"], description="streams music"
+        name="shuffle", aliases=["random", "r"], description="make mess in queue"
     )
     async def random_(
         self,
@@ -418,7 +418,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
         elif not vc.is_paused():
@@ -427,7 +427,9 @@ class Music(commands.Cog):
         vc.resume()
         await ctx.send("Resuming ⏯️")
 
-    @commands.command(name="skip", description="skips to next song in queue")
+    @commands.command(
+        name="skip", aliases=["s"], description="skips to next song in queue"
+    )
     async def skip_(self, ctx):
         """Skip the song."""
         vc = ctx.voice_client
@@ -436,7 +438,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -461,7 +463,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -482,7 +484,7 @@ class Music(commands.Cog):
                 embed = discord.Embed(
                     title="",
                     description=f'Could not find a track for "{pos}"',
-                    color=discord.Color.green(),
+                    color=discord.Color.red(),
                 )
                 await ctx.send(embed=embed)
 
@@ -498,7 +500,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -517,7 +519,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -575,7 +577,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -606,9 +608,7 @@ class Music(commands.Cog):
         embed.set_author(icon_url=self.bot.user.avatar_url, name=f"Now Playing 🎶")
         await ctx.send(embed=embed)
 
-    @commands.command(
-        name="volume", aliases=["vol", "v"], description="changes Kermit's volume"
-    )
+    @commands.command(name="volume", aliases=["vol", "v"], description="Changes volume")
     async def change_volume(self, ctx, *, vol: float = None):
         """Change the player volume.
         Parameters
@@ -622,7 +622,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I am not currently connected to voice",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -638,7 +638,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="Please enter a value between 1 and 100",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
@@ -671,7 +671,7 @@ class Music(commands.Cog):
             embed = discord.Embed(
                 title="",
                 description="I'm not connected to a voice channel",
-                color=discord.Color.green(),
+                color=discord.Color.red(),
             )
             return await ctx.send(embed=embed)
 
