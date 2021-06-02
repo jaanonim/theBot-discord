@@ -3,3 +3,4 @@ env
 .env
 playlist.json
 __pycache__
+token.txt

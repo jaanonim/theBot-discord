@@ -3,6 +3,7 @@ import os
 import discord
 
 from music import Music
+from mytoken import getToken
 
 intents = discord.Intents.all()
 bot = discord.ext.commands.Bot(command_prefix="$", intents=intents)
@@ -110,5 +111,4 @@ async def sub(ctx):
 bot.add_cog(Music(bot))
 
 
-token = os.getenv("TOKEN")
-bot.run(token)
+bot.run(getToken())
