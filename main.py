@@ -9,6 +9,8 @@ intents = discord.Intents.all()
 bot = discord.ext.commands.Bot(command_prefix="$", intents=intents)
 
 ROLE = "aąbcćdeęfghijklłmnoóprsśtuwyzżźxqv1234567890?"
+AUTO_ROLE = ["ktoś", "DJ"]
+BANNED_USERS = {}
 
 
 async def createRoles(guild):
@@ -31,8 +33,14 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    await member.add_roles(discord.utils.get(member.guild.roles, name="🅾Gracze"))
-    await member.add_roles(discord.utils.get(member.guild.roles, name="DJ"))
+    ban = BANNED_USERS.get(member.guild.id)
+    if ban:
+        for b in ban:
+            if b == member:
+                return
+    for n in AUTO_ROLE:
+        r = discord.utils.get(member.guild.roles, name=n)
+        await member.add_roles(r)
 
 
 @bot.command(pass_context=True, aliases=["c", "ha"], description="Give random color")
@@ -103,6 +111,60 @@ async def sub(ctx):
     embed = discord.Embed(
         title="Sub",
         description="Done!",
+        color=discord.Color.green(),
+    )
+    await ctx.send(embed=embed)
+
+
+@bot.command(pass_context=True, description="Remove user auto roles and ban them")
+async def mute(ctx, *, name: str):
+    server = ctx.author.guild
+    user = discord.utils.get(server.members, name=name)
+    if not user:
+        embed = discord.Embed(
+            title="Mute",
+            description=f"User '{name}' not found!",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
+    if not BANNED_USERS.get(server.id):
+        BANNED_USERS[server.id] = []
+    BANNED_USERS[server.id].append(user)
+    for n in AUTO_ROLE:
+        r = discord.utils.get(server.roles, name=n)
+        await user.remove_roles(r)
+
+    embed = discord.Embed(
+        title="Mute",
+        description=f"Done! On user '{name}'",
+        color=discord.Color.green(),
+    )
+    await ctx.send(embed=embed)
+
+
+@bot.command(pass_context=True, description="Add user auto roles and unban them")
+async def unmute(ctx, *, name: str):
+    server = ctx.author.guild
+    user = discord.utils.get(server.members, name=name)
+    if not user:
+        embed = discord.Embed(
+            title="Mute",
+            description=f"User '{name}' not found!",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
+    if not BANNED_USERS.get(server.id):
+        BANNED_USERS[server.id] = []
+    BANNED_USERS[server.id].remove(user)
+    for n in AUTO_ROLE:
+        r = discord.utils.get(server.roles, name=n)
+        await user.add_roles(r)
+
+    embed = discord.Embed(
+        title="Unmute",
+        description=f"Done! On user '{name}'",
         color=discord.Color.green(),
     )
     await ctx.send(embed=embed)
