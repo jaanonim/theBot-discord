@@ -118,6 +118,14 @@ async def sub(ctx):
 
 @bot.command(pass_context=True, description="Remove user auto roles and ban them")
 async def mute(ctx, *, name: str):
+    if ctx.author.name != "jaanonim":
+        embed = discord.Embed(
+            title="Unmute",
+            description=f"You cannot do this",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
     server = ctx.author.guild
     user = discord.utils.get(server.members, name=name)
     if not user:
@@ -145,11 +153,19 @@ async def mute(ctx, *, name: str):
 
 @bot.command(pass_context=True, description="Add user auto roles and unban them")
 async def unmute(ctx, *, name: str):
+    if ctx.author.name != "jaanonim":
+        embed = discord.Embed(
+            title="Unmute",
+            description=f"You cannot do this",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
     server = ctx.author.guild
     user = discord.utils.get(server.members, name=name)
     if not user:
         embed = discord.Embed(
-            title="Mute",
+            title="Unute",
             description=f"User '{name}' not found!",
             color=discord.Color.red(),
         )
