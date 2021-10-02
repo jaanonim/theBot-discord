@@ -153,7 +153,11 @@ async def mute(ctx, *, name: str):
 
 @bot.command(pass_context=True, description="Add user auto roles and unban them")
 async def unmute(ctx, *, name: str):
+    server = ctx.author.guild
     if ctx.author.name != "jaanonim":
+        for u in BANNED_USERS:
+            if u==name:
+                BANNED_USERS[server.id].remove(u)
         embed = discord.Embed(
             title="Unmute",
             description=f"You cannot do this",
@@ -161,7 +165,6 @@ async def unmute(ctx, *, name: str):
         )
         await ctx.send(embed=embed)
         return
-    server = ctx.author.guild
     user = discord.utils.get(server.members, name=name)
     if not user:
         embed = discord.Embed(
@@ -172,8 +175,10 @@ async def unmute(ctx, *, name: str):
         await ctx.send(embed=embed)
         return
     if not BANNED_USERS.get(server.id):
-        BANNED_USERS[server.id] = []
-    BANNED_USERS[server.id].remove(user)
+        try:
+            BANNED_USERS[server.id].remove(user)
+        except:
+            pass
     for n in AUTO_ROLE:
         r = discord.utils.get(server.roles, name=n)
         await user.add_roles(r)
