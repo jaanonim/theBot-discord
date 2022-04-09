@@ -8,6 +8,7 @@ from mytoken import getToken
 intents = discord.Intents.all()
 bot = discord.ext.commands.Bot(command_prefix="$", intents=intents)
 
+MSG_ENABLED = False
 ROLE = "aąbcćdeęfghijklłmnoóprsśtuwyzżźxqv1234567890?"
 AUTO_ROLE = ["ktoś", "DJ"]
 BANNED_USERS = {}
@@ -27,7 +28,8 @@ async def createRoles(guild):
 @bot.event
 async def on_ready():
     for guild in bot.guilds:
-        await createRoles(guild)
+        if MSG_ENABLED:
+            await createRoles(guild)
     print("Running!")
 
 
@@ -73,6 +75,14 @@ async def aboute(ctx):
 
 @bot.command(pass_context=True, aliases=["eee"], description="Send encoded message")
 async def msg(ctx, *, message: str):
+    if not MSG_ENABLED:
+        embed = discord.Embed(
+            title="Error",
+            description="This function is disabled",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
     guild = ctx.guild
     message = message.lower()
     result = ""
@@ -92,6 +102,14 @@ async def msg(ctx, *, message: str):
 
 @bot.command(pass_context=True, description="Add user all 'abc' roles")
 async def add(ctx):
+    if not MSG_ENABLED:
+        embed = discord.Embed(
+            title="Error",
+            description="This function is disabled",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
     roles = await createRoles(ctx.guild)
     for r in roles:
         await ctx.author.add_roles(r)
@@ -105,6 +123,14 @@ async def add(ctx):
 
 @bot.command(pass_context=True, description=" Remove user all 'abc' roles")
 async def sub(ctx):
+    if not MSG_ENABLED:
+        embed = discord.Embed(
+            title="Error",
+            description="This function is disabled",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
     roles = await createRoles(ctx.guild)
     for r in roles:
         await ctx.author.remove_roles(r)
@@ -156,7 +182,7 @@ async def unmute(ctx, *, name: str):
     server = ctx.author.guild
     if ctx.author.name != "jaanonim":
         for u in BANNED_USERS:
-            if u==name:
+            if u == name:
                 BANNED_USERS[server.id].remove(u)
         embed = discord.Embed(
             title="Unmute",
